@@ -5,6 +5,10 @@ const userApi = require("express").Router(); //for Routes
 const service = require("../Service/user.service");
 
 //post Api Routes;
+
+userApi.post("/register", service.registerUser);
+userApi.post("/login", service.loginUser);
+
 // get methods
 
 userApi.get("/", service.getData);

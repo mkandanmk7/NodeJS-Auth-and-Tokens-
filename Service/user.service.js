@@ -3,6 +3,38 @@ const { ObjectId } = require("mongodb"); //driver
 const db = require("../mongo"); // mongo db connection
 
 service = {
+  async registerUser(req, res) {
+    try {
+      const newUser = await db.users.findOne({ email: req.body.email });
+      // console.log(data);
+      console.log("User registerd");
+      if (newUser) {
+        return res.status(400).send({ error: "user Exist already" });
+      }
+
+      // else insert the user to db;
+
+      await db.users.insertOne(req.body);
+
+      res.send("registerd");
+
+      // res.send({ ...req.body, _id});
+    } catch (err) {
+      console.log("error is registering", err);
+      res.sendStatus(500);
+    }
+  },
+  async loginUser(req, res) {
+    try {
+      console.log("Login done");
+      //insert
+      res.send({ ...req.body, _id });
+    } catch (err) {
+      console.log("error is Loggin", err);
+      res.sendStatus(500);
+    }
+  },
+
   async getData(req, res) {
     try {
       // find  make it as array : toArray()
