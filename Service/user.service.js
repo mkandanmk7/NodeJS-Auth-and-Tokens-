@@ -33,13 +33,19 @@ service = {
   },
   async loginUser(req, res) {
     try {
-      const user = await db.users.find({ email: req.body.email });
+      const user = await db.users.findOne({ email: req.body.email });
       if (!user) {
         res.status(400).send("Users doesn't exist");
       }
-      // console.log("Login done");
-      //insert
-      res.send({ ...req.body, _id });
+
+      // compare (our pass, and hash) check password is same or not
+      const isValid = await bcrypt.compare(req.body.password, user.password);
+      if (!isValid) {
+        return res
+          .status(403)
+          .send({ Error: "Email or Password is incorrect" });
+      }
+      res.send({ Message: "User Logged In Peace" });
     } catch (err) {
       console.log("error is Loggin", err);
       res.sendStatus(500);
