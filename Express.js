@@ -1,5 +1,6 @@
 const express = require("express");
 const mongo = require("./mongo");
+const jwt = require("jsonwebtoken");
 
 const postData = require("./Router/Post");
 const userData = require("./Router/Users");
@@ -34,10 +35,19 @@ const port = "3001";
 
     server.use((req, res, next) => {
       const token = req.headers["auth-token"];
+
+      //exist the token
       if (token) {
-        next(); // if token valid go next;
+        try {
+          // checkking;  validation;
+          const user = jwt.verify(token, "muthu@123"); // token is random string for userID,and mail
+          console.log(user);
+          next();
+        } catch (err) {
+          res.sendStatus(401);
+        }
       } else {
-        res.sendStatus(401); //send unAuth msg..
+        res.sendStatus(401);
       }
     });
 
