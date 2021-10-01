@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb"); //driver
-
+const bcrypt = require("bcrypt");
 const db = require("../mongo"); // mongo db connection
 
 service = {
@@ -7,14 +7,21 @@ service = {
     try {
       const newUser = await db.users.findOne({ email: req.body.email });
       // console.log(data);
-      console.log("User registerd");
       if (newUser) {
         return res.status(400).send({ error: "user Exist already" });
       }
 
+      //genSalt create random strings
+      const salt = await bcrypt.genSalt(10);
+
+      // hash (two params : our pass , random string )
+
+      req.body.password = await bcrypt.hash(req.body.password, salt); // it will stored in db;
+
       // else insert the user to db;
 
       await db.users.insertOne(req.body);
+      console.log("User registerd");
 
       res.send("registerd");
 
@@ -26,7 +33,11 @@ service = {
   },
   async loginUser(req, res) {
     try {
-      console.log("Login done");
+      const user = await db.users.find({ email: req.body.email });
+      if (!user) {
+        res.status(400).send("Users doesn't exist");
+      }
+      // console.log("Login done");
       //insert
       res.send({ ...req.body, _id });
     } catch (err) {
