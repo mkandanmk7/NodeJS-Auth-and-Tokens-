@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb"); //driver
 const bcrypt = require("bcrypt");
 const db = require("../mongo"); // mongo db connection
+const jwt = require("jsonwebtoken");
 
 service = {
   async registerUser(req, res) {
@@ -45,7 +46,14 @@ service = {
           .status(403)
           .send({ Error: "Email or Password is incorrect" });
       }
-      res.send({ Message: "User Logged In Peace" });
+
+      // jwt sign(two param : {json: unique id}, "password");
+      const authToken = jwt.sign(
+        { userId: user._id, email: user.email },
+        "muthu@123"
+      ); // generates tokens for parti- user accessing api;
+
+      res.send({ TOken: authToken });
     } catch (err) {
       console.log("error is Loggin", err);
       res.sendStatus(500);
