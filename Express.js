@@ -28,12 +28,21 @@ const port = "3001";
       next();
     });
 
-    // url /posts condtion pass the "/posts to before call back"
-    server.use("/posts", postData);
-
     // /user middle ware
 
     server.use("/users", userData);
+
+    server.use((req, res, next) => {
+      const token = req.headers["auth-token"];
+      if (token) {
+        next(); // if token valid go next;
+      } else {
+        res.sendStatus(401); //send unAuth msg..
+      }
+    });
+
+    // url /posts condtion pass the "/posts to before call back"
+    server.use("/posts", postData);
 
     //start the server;
 
