@@ -57,6 +57,17 @@ service = {
   },
   async updateData(req, res) {
     try {
+      //check userID and _id is same:
+
+      const post = await db.posts.findOne({
+        _id: ObjectId(req.params.id),
+        userId: req.user.userId,
+      });
+      // post not belongs to user
+      if (!post) {
+        return res.status(401).send({ error: "Access Denied for You...!" });
+      }
+
       // console.log(req.params.id); // its string but _id: is Object(id)
       console.log("Updated id is :", req.params.id);
       await db.posts.findOneAndUpdate(
