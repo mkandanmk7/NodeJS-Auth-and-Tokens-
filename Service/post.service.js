@@ -7,7 +7,9 @@ service = {
     // console.log(req.user);
     try {
       // find  make it as array : toArray()
-      const getData = await db.posts.find().toArray(); // use toArray( ) spl for find( ) query
+      const getData = await db.posts
+        .find({ userId: req.user.userId })
+        .toArray(); // use toArray( ) spl for find( ) query
 
       // console.log(getData);
       res.send(getData); // make it as array;   data to fEnd;
