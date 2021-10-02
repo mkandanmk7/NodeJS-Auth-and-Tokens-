@@ -36,6 +36,17 @@ service = {
 
   async deleteData(req, res) {
     try {
+      //check userID and _id is same:
+
+      const post = await db.posts.findOne({
+        _id: ObjectId(req.params.id),
+        userId: req.user.userId,
+      });
+      // post not belongs to user
+      if (!post) {
+        return res.status(401).send({ error: "Access Denied for You...!" });
+      }
+
       console.log("Delete id is :", req.params.id);
       // deleteOne
       await db.posts.deleteOne({ _id: ObjectId(req.params.id) });
