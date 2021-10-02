@@ -53,7 +53,7 @@ service = {
         "muthu@123"
       ); // generates tokens for parti- user accessing api;
 
-      res.send({ TOken: authToken });
+      res.send({ Token: authToken });
     } catch (err) {
       console.log("error is Loggin", err);
       res.sendStatus(500);

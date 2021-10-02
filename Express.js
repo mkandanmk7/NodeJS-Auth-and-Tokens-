@@ -35,13 +35,15 @@ const port = "3001";
 
     server.use((req, res, next) => {
       const token = req.headers["auth-token"];
+      console.log(token);
 
       //exist the token
       if (token) {
         try {
+          console.log("try in");
           // checkking;  validation;
-          const user = jwt.verify(token, "muthu@123"); // token is random string for userID,and mail
-          console.log(user);
+          req.user = jwt.verify(token, "muthu@123"); // token is random string for userID,and mail
+          console.log(req.user);
           next();
         } catch (err) {
           res.sendStatus(401);

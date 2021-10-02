@@ -4,24 +4,30 @@ const db = require("../mongo"); // mongo db connection
 
 service = {
   async getData(req, res) {
+    // console.log(req.user);
     try {
       // find  make it as array : toArray()
       const getData = await db.posts.find().toArray(); // use toArray( ) spl for find( ) query
 
-      console.log(getData);
+      // console.log(getData);
       res.send(getData); // make it as array;   data to fEnd;
     } catch (err) {
       res.sendStatus(500); // send error status;
     }
   },
   async postData(req, res) {
+    console.log(req.user);
     try {
-      const { insertedId: _id } = await db.posts.insertOne(req.body);
+      const { insertedId: _id } = await db.posts.insertOne({
+        ...req.body,
+        userId: req.user.userId,
+      });
 
       console.log("created New data");
       //insert
       res.send({ ...req.body, _id });
     } catch (err) {
+      console.log("Error in create pOst", err);
       res.sendStatus(500);
     }
   },
