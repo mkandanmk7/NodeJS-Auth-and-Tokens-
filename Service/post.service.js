@@ -6,12 +6,12 @@ service = {
   async getData(req, res) {
     // console.log(req.user);
     try {
-      // find  make it as array : toArray()
+      // find   make it as array : toArray()
       const getData = await db.posts
         .find({ userId: req.user.userId })
         .toArray(); // use toArray( ) spl for find( ) query
 
-      // console.log(getData);
+      // console.log(gestData);
       res.send(getData); // make it as array;   data to fEnd;
     } catch (err) {
       res.sendStatus(500); // send error status;
@@ -29,7 +29,7 @@ service = {
       //insert
       res.send({ ...req.body, _id });
     } catch (err) {
-      console.log("Error in create pOst", err);
+      console.log("Error for create pOst", err);
       res.sendStatus(500);
     }
   },
